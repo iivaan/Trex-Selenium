@@ -19,6 +19,10 @@ public class HomePageView extends AbstractView<HomePageView> {
     @FindBy(linkText = "LOGOUT")
     private TestObjectFacade logoutLink;
 
+    //@NotRequired
+    @FindBy(linkText = "LOGOUT2")
+    private TestObjectFacade logoutLink2;
+
     @FindBy(tagName = "a")
     private List<UIElement> allLinks;
 

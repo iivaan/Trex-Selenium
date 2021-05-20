@@ -49,12 +49,12 @@ public abstract class AbstractView <T extends AbstractView<T>>  implements View{
 
         List<Condition<?>> list = analyzer.getLoadConditions();
         for(Condition<?> item : list){
-            try {
+            //try {
                 loaded = loaded && item.isMet();
-            }
-            catch (Exception ex){
-                System.out.println(ex.getMessage());
-            }
+            //}
+            //catch (Exception ex){
+            //    System.out.println(ex.getMessage());
+            //}
         }
 
         return loaded;
