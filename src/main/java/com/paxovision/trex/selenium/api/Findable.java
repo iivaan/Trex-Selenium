@@ -34,4 +34,7 @@ public interface Findable {
      * its presence.
      */
     boolean isPresent();
+
+    boolean isNotPresent();
+
 }

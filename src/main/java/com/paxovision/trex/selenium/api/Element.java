@@ -26,4 +26,11 @@ public interface Element extends Findable {
      * @return
      */
     boolean isDisplayed();
+    boolean isNotDisplayed();
+
+    boolean isEnabled();
+    boolean isNotEnabled();
+
+    boolean isSelected();
+    boolean isNotSelected();
 }

@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class UIElementTest {
 
@@ -58,6 +59,90 @@ public class UIElementTest {
         UIElement loginLink = parent.findElement(By.linkText("LOGIN"));
         loginLink.click();
     }
+
+
+    @Test
+    public void isPresentTest(){
+        UIElement loginLink = UIElement.getInstance(By.linkText("LOGIN"));
+        assertThat(loginLink.isPresent()).isTrue();
+
+        UIElement loginLink2 = UIElement.getInstance(By.linkText("LOGIN2"));
+        assertThat(loginLink2.isPresent()).isFalse();
+    }
+
+    @Test
+    public void shoutBePresentTest(){
+        UIElement loginLink = UIElement.getInstance(By.linkText("LOGIN"));
+        loginLink.shouldBePresent().click();
+    }
+    @Test
+    public void shoutNotBePresentTest(){
+        UIElement loginLink = UIElement.getInstance(By.linkText("LOGINx"));
+        loginLink.shouldNotBePresent();
+    }
+    @Test
+    public void shouldHaveTextTest(){
+        UIElement loginLink = UIElement.getInstance(By.linkText("LOGIN"));
+        loginLink.shouldHaveText("LOGIN").click();
+    }
+    @Test
+    public void shouldHaveValueTest(){
+        UIElement loginLink = UIElement.getInstance(By.linkText("LOGIN"));
+        loginLink.click();
+
+        UIElement loginButton = UIElement.getInstance(By.name("commit"));
+        loginButton.shouldHaveValue("Login").click();
+
+    }
+
+    @Test
+    public void isNotPresentTest(){
+        UIElement loginLink = UIElement.getInstance(By.linkText("LOGIN"));
+        assertThat(loginLink.isNotPresent()).isFalse();
+
+        UIElement loginLink2 = UIElement.getInstance(By.linkText("LOGIN2"));
+        assertThat(loginLink2.isNotPresent()).isTrue();
+    }
+
+    @Test
+    public void isDisplayedTest(){
+        UIElement loginLink = UIElement.getInstance(By.linkText("LOGIN"));
+        assertThat(loginLink.isDisplayed()).isTrue();
+
+        UIElement loginLink2 = UIElement.getInstance(By.linkText("LOGIN2"));
+        assertThat(loginLink2.isDisplayed()).isFalse();
+    }
+    @Test
+    public void isNotDisplayedTest(){
+        UIElement loginLink = UIElement.getInstance(By.linkText("LOGIN"));
+        assertThat(loginLink.isNotDisplayed()).isFalse();
+
+        UIElement loginLink2 = UIElement.getInstance(By.linkText("LOGIN2"));
+        assertThat(loginLink2.isNotDisplayed()).isTrue();
+    }
+
+    @Test
+    public void waitUntilEnabled(){
+        UIElement loginLink = UIElement.getInstance(By.linkText("LOGIN"));
+        loginLink.waitUntilDisabled(3000).click();
+    }
+
+    @Test
+    public void waitUntillClickable(){
+        UIElement loginLink = UIElement.getInstance(By.linkText("LOGIN"));
+        loginLink.waitUntilClickable().click();
+    }
+
+    @Test
+    public void waitUntilTextToBe(){
+        UIElement loginLink = UIElement.getInstance(By.linkText("LOGIN"));
+        loginLink.waitUntilTextToBe(30000,"LOGIN").click();
+
+        UIElement loginButton = UIElement.getInstance(By.name("commit"));
+        loginButton.waitUntilAttribute(30000,"value","Loginx").click();
+
+    }
+
 
     @After
     public void tearDown(){
