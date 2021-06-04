@@ -1,13 +1,11 @@
 package com.paxovision.trex.selenium.api;
 
-import com.paxovision.trex.selenium.annotations.Context;
-import com.paxovision.trex.selenium.annotations.NotRequired;
-import com.paxovision.trex.selenium.annotations.Require;
-import com.paxovision.trex.selenium.annotations.RequireAll;
+import com.paxovision.trex.selenium.annotations.*;
 import com.paxovision.trex.selenium.exceptions.NoRequiredElementsException;
 import com.paxovision.trex.selenium.exceptions.TrexSeleniumException;
 import com.paxovision.trex.selenium.matchers.LoadConditionMatcher;
-import com.paxovision.trex.selenium.synq.Condition;
+import com.paxovision.trex.selenium.matchers.Condition;
+//import com.paxovision.trex.selenium.synq.Condition;
 import com.paxovision.trex.selenium.utils.RequiredList;
 import org.openqa.selenium.support.FindBy;
 
@@ -20,7 +18,8 @@ import java.util.stream.Collectors;
 import static com.paxovision.trex.selenium.matchers.RequiredListMatcher.hasCorrectNumberOfItemsMatching;
 import static com.paxovision.trex.selenium.matchers.TrexMatchers.displayed;
 import static com.paxovision.trex.selenium.matchers.TrexMatchers.present;
-import static com.paxovision.trex.selenium.synq.HamcrestCondition.match;
+//import static com.paxovision.trex.selenium.synq.HamcrestCondition.match;
+import static com.paxovision.trex.selenium.matchers.HamcrestCondition.match;
 
 public class Analyzer {
     private final Object view;
@@ -30,6 +29,8 @@ public class Analyzer {
 
     private List<RequiredList<Object>> requiredLists;
     private List<Object> requiredObjects;
+
+    private final List<Field> viewModels;
 
     private List<Condition<?>> isLoaded;
     private List<Condition<?>> isDisplayed;
@@ -48,6 +49,8 @@ public class Analyzer {
         this.required = filterRequired(Objects.requireNonNull(fields, "fields"));
 
         this.findByAnnotadedFields = filterFindByAnnotatedFields(Objects.requireNonNull(fields, "fields"));
+
+        this.viewModels = filterViewModelAnnotatedFields(Objects.requireNonNull(fields, "fields"));
     }
 
     public List<Field> findByAnnotadedFields(){
@@ -176,6 +179,13 @@ public class Analyzer {
                 .collect(Collectors.toList());
     }
 
+    private List<Field> filterViewModelAnnotatedFields(List<Field> fields) {
+        return fields.stream()
+                .filter(this::isViewElementFindableOrList)
+                .filter(this::isViewModelAnnotated)
+                .collect(Collectors.toList());
+    }
+
     private boolean isList(Field f) {
         return List.class.isAssignableFrom(f.getType());
     }
@@ -225,6 +235,12 @@ public class Analyzer {
     private boolean isFindByAnnotated(Field field) {
         boolean result;
         result = field.getAnnotation(FindBy.class) != null;
+        return result;
+    }
+
+    private boolean isViewModelAnnotated(Field field) {
+        boolean result;
+        result = field.getAnnotation(ViewModel.class) != null;
         return result;
     }
 }

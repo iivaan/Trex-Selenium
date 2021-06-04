@@ -5,9 +5,9 @@ import com.paxovision.trex.selenium.utils.DriverFactory;
 import com.paxovision.trex.selenium.api.TestObjectFacade;
 import com.paxovision.trex.selenium.api.UIElement;
 import io.github.bonigarcia.wdm.ChromeDriverManager;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,7 +20,7 @@ public class UIElementTest {
 
     private WebDriver driver;
 
-    @Before
+    @BeforeEach
     public void setUp(){
         //ChromeDriverManager.chromedriver().setup();
         ///driver = new ChromeDriver();
@@ -139,12 +139,30 @@ public class UIElementTest {
         loginLink.waitUntilTextToBe(30000,"LOGIN").click();
 
         UIElement loginButton = UIElement.getInstance(By.name("commit"));
-        loginButton.waitUntilAttribute(30000,"value","Loginx").click();
+        loginButton.waitUntilAttribute(30000,"value","Login").click();
+
+    }
+
+    @Test
+    public void hasFocusTest(){
+        UIElement loginLink = UIElement.getInstance(By.linkText("LOGIN"));
+        loginLink.waitUntilTextToBe(3000,"LOGIN").click();
+
+        UIElement emailTextbox = UIElement.getInstance(By.id("spree_user_email"));
+        emailTextbox.click();
+        UIElement passwordTextbox = UIElement.getInstance(By.id("spree_user_password"));
+        passwordTextbox.setFocus();
+        //passwordTextbox.click();
+        //emailTextbox.click();
+        assertThat(passwordTextbox.hasFocus()).isTrue();
+
+        UIElement loginButton = UIElement.getInstance(By.name("commit"));
+        loginButton.setFocus().shouldHaveFocus();
 
     }
 
 
-    @After
+    @AfterEach
     public void tearDown(){
         delayFor(3000);
         //driver.quit();

@@ -33,4 +33,8 @@ public interface Element extends Findable {
 
     boolean isSelected();
     boolean isNotSelected();
+
+    boolean isVisible();
+
+
 }

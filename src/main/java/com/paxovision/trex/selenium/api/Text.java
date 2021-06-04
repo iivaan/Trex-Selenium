@@ -21,5 +21,6 @@ package com.paxovision.trex.selenium.api;
 
 public interface Text extends Element {
     String getText();
+    String getTextContent();
     String getValue();
 }

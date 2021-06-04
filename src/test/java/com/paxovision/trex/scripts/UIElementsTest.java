@@ -4,9 +4,9 @@ import com.paxovision.trex.selenium.api.UIElement;
 import com.paxovision.trex.selenium.api.UIElements;
 import com.paxovision.trex.selenium.utils.DriverFactory;
 import io.github.bonigarcia.wdm.ChromeDriverManager;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -15,7 +15,7 @@ import java.util.List;
 public class UIElementsTest {
     private WebDriver driver;
 
-    @Before
+    @BeforeEach
     public void setUp(){
         ChromeDriverManager.chromedriver().setup();
         ///driver = new ChromeDriver();
@@ -35,7 +35,7 @@ public class UIElementsTest {
     }
 
 
-    @After
+    @AfterEach
     public void tearDown(){
         delayFor(3000);
         driver.quit();

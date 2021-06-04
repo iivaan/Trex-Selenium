@@ -7,9 +7,9 @@ import com.paxovision.trex.selenium.api.UIElements;
 import com.paxovision.trex.selenium.driver.WebDriverFactory;
 import com.paxovision.trex.selenium.utils.DriverFactory;
 import io.github.bonigarcia.wdm.ChromeDriverManager;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -24,13 +24,19 @@ public class PageViewTest {
     private HomePageView homePageView;
     private LoginPageView loginPageView;
 
-    @Before
+    @BeforeEach
     public void setUp(){
         driver = WebDriverFactory.getInstance().getDriver();
         driver.navigate().to("http://spree.shiftedtech.com");
 
         homePageView = new HomePageView();
         loginPageView = new LoginPageView();
+    }
+
+    @Test
+    public void test1_0(){
+        homePageView.isLoaded();
+        homePageView.sideBarView().printList();
     }
 
     @Test
@@ -41,7 +47,7 @@ public class PageViewTest {
     }
 
 
-    @After
+    @AfterEach
     public void tearDown(){
         delayFor(3000);
         driver.quit();

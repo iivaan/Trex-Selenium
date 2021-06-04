@@ -1,11 +1,13 @@
 package com.paxovision.trex.selenium.api;
 
+import com.google.common.base.Splitter;
 import com.google.inject.Inject;
 import com.paxovision.trex.selenium.exceptions.UIElementNotDisplayedException;
 import org.assertj.core.api.AbstractBooleanAssert;
 import org.assertj.core.api.AbstractStringAssert;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.ui.*;
 
@@ -20,13 +22,13 @@ import java.util.regex.Pattern;
 
 public abstract class AbstractTestObject <T extends UIElement<T>> implements UIElement<T>{
     public static int DEFAULT_WAIT_FOR_TIMEOUT_IN_MILLISECONDS = 1000;
-    public static boolean ENABLE_HIGHLIGHT = false;
-    protected final T SELF;
-    protected WebElement resolvedElement = null;
-
     private static final int WAIT_FOR_ELEMENT_PAUSE_LENGTH = 100;
     private final Sleeper sleeper = Sleeper.SYSTEM_SLEEPER;;
     private final Clock driverClock = Clock.systemDefaultZone();;
+    public static boolean ENABLE_HIGHLIGHT = false;
+
+    protected final T SELF;
+    protected WebElement resolvedElement = null;
 
     @Inject
     protected SearchContext searchContext = null;
@@ -84,7 +86,9 @@ public abstract class AbstractTestObject <T extends UIElement<T>> implements UIE
     public String getText() {
         return attemptAndGet(WebElement::getText);
     }
-
+    public String getTextContent() {
+        return getAttribute("textContent");
+    }
     public String getValue() {
         return getAttribute("value");
     }
@@ -99,6 +103,42 @@ public abstract class AbstractTestObject <T extends UIElement<T>> implements UIE
     }
     public String getCssValue(String property) {
         return attemptAndGet(e -> e.getCssValue(property));
+    }
+
+    @Override
+    public boolean hasClass(String cssClassName) {
+        String cssClassValue = getAttribute("class").toLowerCase();
+        List<String> cssClasses = Splitter.on(" ").omitEmptyStrings().trimResults().splitToList(cssClassValue);
+        return cssClasses.contains(cssClassName.toLowerCase());
+    }
+
+    /**
+     * Does this element currently have the focus.
+     */
+    @Override
+    public boolean hasFocus() {
+
+        JavascriptExecutorFacade js = new JavascriptExecutorFacade(searchContext);
+        WebElement activeElement = (WebElement) js.executeScript("return window.document.activeElement");
+        return getResolvedElement().equals(activeElement);
+    }
+
+    @Override
+    public T setFocus(){
+        getResolvedElement();
+        new Actions((WebDriver) searchContext).moveToElement(resolvedElement).perform();
+        JavascriptExecutorFacade js = new JavascriptExecutorFacade(searchContext);
+        js.executeScript("arguments[0].focus();",resolvedElement);
+
+        return SELF;
+    }
+
+    @Override
+    public T setWindowFocus() {
+        //new Actions((WebDriver) searchContext).moveToElement(resolvedElement).perform();
+        JavascriptExecutorFacade js = new JavascriptExecutorFacade(searchContext);
+        js.executeScript("window.focus();");
+        return SELF;
     }
 
 
@@ -148,6 +188,33 @@ public abstract class AbstractTestObject <T extends UIElement<T>> implements UIE
         return !isPresent();
     }
 
+    /**
+     * Is this web element present and visible on the screen
+     * This method will not throw an exception if the element is not on the screen at all.
+     * If the element is not visible, the method will wait a bit to see if it appears later on.
+     */
+    @Override
+    public boolean isVisible() {
+
+        try {
+            getResolvedElement();
+            if (resolvedElement == null) {
+                return false;
+            }
+
+            if (!isPresent()) {
+                return false;
+            }
+
+            if (resolvedElement != null) {
+                waitUntilVisible(DEFAULT_WAIT_FOR_TIMEOUT_IN_MILLISECONDS);
+            }
+            return (resolvedElement != null) && (resolvedElement.isDisplayed());
+
+        } catch (ElementNotVisibleException | NoSuchElementException | StaleElementReferenceException | TimeoutException e) {
+            return false;
+        }
+    }
 
     public Point getLocation() {
         return attemptAndGet(WebElement::getLocation);
@@ -166,7 +233,7 @@ public abstract class AbstractTestObject <T extends UIElement<T>> implements UIE
     }
 
 
-
+    @Override
     public T highlight() {
         if(isDisplayed()) {
             JavascriptExecutor js = null;
@@ -193,6 +260,7 @@ public abstract class AbstractTestObject <T extends UIElement<T>> implements UIE
         return SELF;
     }
 
+    @Override
     public T setHighlightBorder(boolean highlight) {
         JavascriptExecutor js = null;
 
@@ -264,6 +332,25 @@ public abstract class AbstractTestObject <T extends UIElement<T>> implements UIE
     }
     public T shouldNotBeSelected(){
         Assertions.assertThat(!isSelected()).as("Element [" + by.toString() + "] should not be selected").isTrue();
+        return SELF;
+    }
+
+    public T shouldHaveFocus(){
+        Assertions.assertThat(hasFocus()).as("Element [" + by.toString() + "] should have focus").isTrue();
+        return SELF;
+    }
+    public T shouldNotHaveFocus(){
+        Assertions.assertThat(!hasFocus()).as("Element [" + by.toString() + "] should not have focus").isTrue();
+        return SELF;
+    }
+
+    public T shouldHaveClass(String className){
+        Assertions.assertThat(hasClass(className)).as("Element [" + by.toString() + "] should have class -> " + className).isTrue();
+        return SELF;
+    }
+
+    public T shouldNotHaveClass(String className){
+        Assertions.assertThat(!hasClass(className)).as("Element [" + by.toString() + "] should not have class -> " + className).isTrue();
         return SELF;
     }
 
@@ -479,7 +566,6 @@ public abstract class AbstractTestObject <T extends UIElement<T>> implements UIE
         return SELF;
     }
 
-    //@Override
     private Wait<WebDriver> waitForCondition(int waitForTimeoutInMilliseconds) {
         Objects.requireNonNull(searchContext,"SearchContext is required.");
 
@@ -580,7 +666,7 @@ public abstract class AbstractTestObject <T extends UIElement<T>> implements UIE
         return resolvedElement;
     }
 
-    protected void getResolvedElement() {
+    protected WebElement getResolvedElement() {
         Objects.requireNonNull(searchContext,"SearchContext is required.");
         Objects.requireNonNull(by,"By is required.");
 
@@ -599,6 +685,7 @@ public abstract class AbstractTestObject <T extends UIElement<T>> implements UIE
                 if (ENABLE_HIGHLIGHT)  highlight();
             }
         }
+        return resolvedElement;
     }
 
 }

@@ -3,8 +3,11 @@ package com.paxovision.trex.selenium.api;
 
 import com.google.inject.Injector;
 import com.paxovision.trex.selenium.annotations.Context;
-import com.paxovision.trex.selenium.synq.Condition;
+//import com.paxovision.trex.selenium.synq.Condition;
+import com.paxovision.trex.selenium.matchers.Condition;
 import com.paxovision.trex.selenium.utils.ReflectionUtil;
+import org.assertj.core.api.Assertions;
+import org.assertj.core.api.SoftAssertions;
 import org.openqa.selenium.SearchContext;
 
 import java.lang.reflect.Field;
@@ -44,8 +47,25 @@ public abstract class AbstractView <T extends AbstractView<T>>  implements View{
     }
 
 
+    public void validate(){
+
+        SoftAssertions softAssertions = new SoftAssertions();
+        List<Condition<?>> list = analyzer.getLoadConditions();
+        for(Condition<?> item : list){
+            softAssertions.assertThat(item.isMet()).as(item.toString()).isTrue();
+            //try {
+            //loaded = loaded && item.isMet();
+            //}
+            //catch (Exception ex){
+            //    System.out.println(ex.getMessage());
+            //}
+        }
+        softAssertions.assertAll();
+    }
+
     public boolean isLoaded() {
         boolean loaded = true;
+
 
         List<Condition<?>> list = analyzer.getLoadConditions();
         for(Condition<?> item : list){
@@ -57,14 +77,18 @@ public abstract class AbstractView <T extends AbstractView<T>>  implements View{
             //}
         }
 
+
         return loaded;
     }
 
     //@Override
     public boolean isLoaded2() {
-        boolean loaded =  analyzer.getLoadConditions()
+        boolean loaded = true;
+
+        loaded =  analyzer.getLoadConditions()
                 .stream()
                 .allMatch(Condition::isMet);
+
         return loaded;
     }
 

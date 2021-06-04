@@ -38,6 +38,14 @@ public interface UIElement<T extends UIElement<T>> extends Element,Text{
     T sendKeys(CharSequence... charSequence);
     T clear();
 
+    boolean hasClass(String cssClassName);
+    boolean hasFocus();
+    T setFocus();
+    T setWindowFocus();
+
+    T highlight();
+    T setHighlightBorder(boolean highlight);
+
     T waitUntilEnabled();
     T waitUntilEnabled(int waitForTimeoutInMilliseconds);
 
@@ -82,6 +90,8 @@ public interface UIElement<T extends UIElement<T>> extends Element,Text{
     T shouldNotBeEnabled();
     T shouldBeSelected();
     T shouldNotBeSelected();
+    T shouldHaveFocus();
+    T shouldNotHaveFocus();
     T shouldHaveText(String textExpected);
     T shouldHaveIgnoringCaseText(String textExpected);
     T shouldContainsText(String textExpected);
@@ -95,6 +105,8 @@ public interface UIElement<T extends UIElement<T>> extends Element,Text{
     T shouldHaveValue(String valueExpected);
     T shouldHaveAttributeValue(String attribute, String attributeValueExpected);
     T shouldHaveCssValue(String css, String cssValueExpected);
+    T shouldHaveClass(String className);
+    T shouldNotHaveClass(String className);
 
 
     AbstractStringAssert<?> hasValue();
