@@ -1,9 +1,12 @@
-package com.paxovision.trex.selenium.api;
+package com.paxovision.trex.selenium.guice;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.matcher.Matchers;
+import com.paxovision.trex.selenium.annotations.ViewModel;
+import com.paxovision.trex.selenium.api.TestObjectFacade;
+import com.paxovision.trex.selenium.api.TestObjectListFacade;
 import com.paxovision.trex.selenium.driver.WebDriverFactory;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -19,6 +22,7 @@ public class GuiceFactory {
     private static WebDriverFactory driverFactory = WebDriverFactory.getInstance();
     public static Injector TestObjectGuiceModuleInjector = Guice.createInjector(new TestObjectGuiceModule());
     public static Injector TestObjectListGuiceModuleInjector = Guice.createInjector(new TestObjectListGuiceModule());
+    public static Injector ViewModelGuiceModuleInjector = Guice.createInjector(new ViewModelGuiceModule());
 
     public static class TestObjectGuiceModule extends AbstractModule {
         @Override
@@ -55,6 +59,13 @@ public class GuiceFactory {
 
         }
 
+    }
+
+    public static class ViewModelGuiceModule extends  AbstractModule{
+        @Override
+        protected void configure() {
+            //bind(View.class).annotatedWith(ViewModel.class);
+        }
     }
 
     public static class TestObjectMethodInterceptor implements MethodInterceptor {

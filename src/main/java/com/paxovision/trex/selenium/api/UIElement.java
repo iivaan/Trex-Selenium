@@ -1,5 +1,6 @@
 package com.paxovision.trex.selenium.api;
 
+import com.paxovision.trex.selenium.guice.GuiceFactory;
 import org.assertj.core.api.AbstractBooleanAssert;
 import org.assertj.core.api.AbstractStringAssert;
 import org.openqa.selenium.By;

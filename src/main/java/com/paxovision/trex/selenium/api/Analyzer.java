@@ -47,10 +47,12 @@ public class Analyzer {
     public Analyzer(Object view, List<Field> fields) {
         this.view = Objects.requireNonNull(view, "view");
         this.required = filterRequired(Objects.requireNonNull(fields, "fields"));
-
         this.findByAnnotadedFields = filterFindByAnnotatedFields(Objects.requireNonNull(fields, "fields"));
-
         this.viewModels = filterViewModelAnnotatedFields(Objects.requireNonNull(fields, "fields"));
+    }
+
+    public List<Field> viewModelAnnotadedFields(){
+        return this.viewModels;
     }
 
     public List<Field> findByAnnotadedFields(){

@@ -24,7 +24,7 @@ public class HomePageView extends AbstractView<HomePageView> {
     @FindBy(tagName = "a")
     private List<UIElement> allLinks;
 
-    @ViewModel
+    //@ViewModel
     private SideBarView sideBarView;
 
     public HomePageView(){

@@ -62,6 +62,20 @@ public class Initializer {
         }
     }
 
+    public void initializeViewModelAnnotatedFields(SearchContext context, List<Field> fields) {
+        for(Field field : fields){
+            if(AbstractView.class.isAssignableFrom(field.getType())) {
+                try {
+                    field.set(view, View.getInstance(field.getType()));
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+
+
     protected By buildByFromShortFindBy(FindBy findBy) {
         if (!"".equals(findBy.className())) {
             return By.className(findBy.className());

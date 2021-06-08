@@ -152,6 +152,10 @@ public class TestObjectListFacade<T> implements UIElements<T>, Caching {
         return list().subList(fromIndex, toIndex);
     }
 
+    public String toString() {
+        return "UIElements(" + by + ")";
+    }
+
     private List<T> list() {
         if (cachedList == null) {
             cachedList =  new ArrayList<>(); //list.get();

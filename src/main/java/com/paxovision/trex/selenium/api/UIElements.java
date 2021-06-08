@@ -1,5 +1,6 @@
 package com.paxovision.trex.selenium.api;
 
+import com.paxovision.trex.selenium.guice.GuiceFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 

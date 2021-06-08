@@ -9,22 +9,22 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 
-public class PageLoadTest {
+public class PageLoadRequireTest {
     static{
         System.setProperty("WEB_DRIVER_TYPE","CHROME");
     }
 
     private WebDriver driver;
-    private HomePageView homePageView;
+    //private HomePageView homePageView;
     private RequiredHomePageView requiredHomePageView;
-    private LoginPageView loginPageView;
+    //private LoginPageView loginPageView;
 
     @BeforeEach
     public void setUp(){
         driver = WebDriverFactory.getInstance().getDriver();
-        homePageView = new HomePageView();
+        //homePageView = new HomePageView();
         requiredHomePageView = new RequiredHomePageView();
-        loginPageView = new LoginPageView();
+        //loginPageView = new LoginPageView();
 
 
         driver.navigate().to("http://spree.shiftedtech.com");
@@ -32,10 +32,10 @@ public class PageLoadTest {
 
     @Test
     public void test1(){
-        System.out.println("IsHomepageLoaded:" + requiredHomePageView.isLoaded());
+        //System.out.println("IsHomepageLoaded:" + requiredHomePageView.isLoaded());
         requiredHomePageView.validate();
         requiredHomePageView.navigateToLoginPage();
-        loginPageView.login("shiftqa01@gmail.com","shiftedtech");
+        //loginPageView.login("shiftqa01@gmail.com","shiftedtech");
     }
 
 

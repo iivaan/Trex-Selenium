@@ -39,6 +39,8 @@ import static com.paxovision.trex.selenium.matchers.TrexMatchers.*;
  * it will never match.
  */
 public class LoadConditionMatcher extends BaseMatcher<Object> {
+    String descriptionToAppend = "";
+
     @Override
     public boolean matches(Object item) {
         return doesItemMatchAppropriateCondition(item);
@@ -46,8 +48,9 @@ public class LoadConditionMatcher extends BaseMatcher<Object> {
 
     @Override
     public void describeTo(Description description) {
-        description.appendText("a Findable, Element, or View that is present, displayed, or loaded "
-                + "respectively, depending on the type.");
+        //description.appendText("a Findable, Element, or View that is present, displayed, or loaded "
+        //        + "respectively, depending on the type.");
+        description.appendText(descriptionToAppend);
     }
 
     /**
@@ -81,10 +84,13 @@ public class LoadConditionMatcher extends BaseMatcher<Object> {
         Matcher<?> matcher;
 
         if (item instanceof View) {
+            descriptionToAppend = "a View that is loaded";
             matcher = loaded();
         } else if (item instanceof Element) {
+            descriptionToAppend = "an Element that is displayed";
             matcher = displayed();
         } else {
+            descriptionToAppend = "an Object that is present";
             matcher = present();
         }
 
