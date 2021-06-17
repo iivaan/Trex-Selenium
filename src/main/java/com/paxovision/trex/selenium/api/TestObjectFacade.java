@@ -27,6 +27,14 @@ public class TestObjectFacade extends AbstractTestObject<TestObjectFacade>{
     }
 
 
+    public ISelect select(){
+        return new SelectTestObjectFacade(this);
+    }
+
+    public IDeselect deselect(){
+        return new SelectTestObjectFacade(this);
+    }
+
 
    /* public List<WebElement> findElements(By by) {
         getResolvedElement();

@@ -4,6 +4,7 @@ import com.paxovision.trex.framework.pages.HomePageView;
 import com.paxovision.trex.framework.pages.LoginPageView;
 import com.paxovision.trex.framework.pages.RequiredHomePageView;
 import com.paxovision.trex.selenium.driver.WebDriverFactory;
+import com.paxovision.trex.selenium.utils.PauseExecution;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,6 +35,7 @@ public class PageLoadRequireTest {
     public void test1(){
         //System.out.println("IsHomepageLoaded:" + requiredHomePageView.isLoaded());
         requiredHomePageView.validate();
+
         requiredHomePageView.navigateToLoginPage();
         //loginPageView.login("shiftqa01@gmail.com","shiftedtech");
     }

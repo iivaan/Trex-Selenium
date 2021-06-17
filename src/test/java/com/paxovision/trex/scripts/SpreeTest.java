@@ -3,6 +3,7 @@ package com.paxovision.trex.scripts;
 import com.paxovision.trex.selenium.api.UIElement;
 import com.paxovision.trex.selenium.driver.WebDriverFactory;
 import com.paxovision.trex.selenium.utils.DriverFactory;
+import com.paxovision.trex.selenium.utils.PauseExecution;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,7 @@ public class SpreeTest {
 
         UIElement email = UIElement.getInstance(By.id("spree_user_email"));
         email.clear().shouldHaveFocus().sendKeys("shiftqa01@gmail.com").hasValue().isEqualTo("shiftqa01@gmail.com");
-
+        PauseExecution.forTimeOf(10).seconds();
         UIElement password = UIElement.getInstance( By.id("spree_user_password"));
         password.highlight().setFocus().shouldHaveFocus().sendKeys("shiftedtech");
 

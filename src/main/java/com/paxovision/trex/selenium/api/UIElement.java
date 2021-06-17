@@ -31,6 +31,9 @@ public interface UIElement<T extends UIElement<T>> extends Element,Text{
         return element;
     }
 
+    ISelect select();
+    IDeselect deselect();
+
     UIElement findElement(By by);
     List<UIElement> findElements(By by);
 
