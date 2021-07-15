@@ -1,0 +1,14 @@
+{
+  "port": 8080,
+  "complexEntries": {
+    "hostname": "www.github.com",
+    "aMap": {
+      "key1": "value1",
+      "key2": "value2"
+    },
+    "aList": [
+      "value1",
+      "value2"
+    ]
+  }
+}
